@@ -207,7 +207,7 @@ bot.catch(async (err, ctx) => {
 
 await connectToDatabase();
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.WEBHOOK_DOMIAN === undefined) {
   bot.launch(() => console.log("Bot successfully started"));
 } else {
   const HOST = "0.0.0.0";
