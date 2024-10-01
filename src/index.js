@@ -8,6 +8,7 @@ import { greetingMessage } from "./messages/greeting.js";
 import { credentials, subscriptions } from "../drizzle/schema.js";
 import { eq } from "drizzle-orm";
 import { sanitizeMarkdown } from "telegram-markdown-sanitizer";
+import { registerReminderCron } from "./cron/reminder.js";
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -133,6 +134,8 @@ composer.action("add_chat", (ctx) => ctx.scene.enter("ADD_CHAT_SCENE"));
 bot.use(session());
 bot.use(stage.middleware());
 bot.use(Composer.privateChat(composer));
+
+registerReminderCron(bot);
 
 bot.catch(async (err, ctx) => {
   console.error(err);
