@@ -10,7 +10,7 @@ export const sessionsStore = new Map();
 
 export function registerReminderCron(bot) {
   cron.schedule(
-    "* * * * *",
+    "*/5 * * * *",
     async () => {
       const subscriptionEntries = await db
         .select({
@@ -56,6 +56,19 @@ export function registerReminderCron(bot) {
         await bot.telegram.sendMessage(
           userId,
           "⚠️ *Уведомления не могут быть отправлены поскольку у вас указаны неверные имя пользователя или пароль*",
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "Данные для входа в PRO.GUAP",
+                    callback_data: "credentials",
+                  },
+                ],
+              ],
+            },
+            parse_mode: "MarkdownV2",
+          },
         );
       }
 
