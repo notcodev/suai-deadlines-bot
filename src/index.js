@@ -43,6 +43,68 @@ composer.action("add_credentials", (ctx) => {
   return ctx.scene.enter("ADD_CREDENTIALS_SCENE");
 });
 
+composer.action("delete_credentials", async (ctx) => {
+  await db.delete(credentials).where(eq(credentials.id, ctx.from.id));
+
+  await ctx.editMessageText(
+    "✅ *Данные для входа в PRO.GUAP были успешно удалены*",
+    {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Вернуться в главное меню",
+              callback_data: "main_menu",
+            },
+          ],
+        ],
+      },
+      parse_mode: "MarkdownV2",
+    },
+  );
+});
+
+composer.action("credentials", async (ctx) => {
+  const credentialsEntry = await db
+    .select()
+    .from(credentials)
+    .where(eq(credentials.userId, ctx.from.id))
+    .then((entries) => entries.at(0));
+
+  if (!credentialsEntry) {
+    await ctx.editMessageText("😢 *Данные для входа отсутствуют*", {
+      parse_mode: "MarkdownV2",
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Добавить данные для входа",
+              callback_data: "add_credentials",
+            },
+          ],
+          [{ text: "Вернуться в главное меню", callback_data: "main_menu" }],
+        ],
+      },
+    });
+    return;
+  }
+
+  await ctx.editMessageText(
+    `👤 *Имя пользователя:* ||${sanitizeMarkdown(credentialsEntry.suaiUsername)}||
+🔑 *Пароль:* ||${sanitizeMarkdown(credentialsEntry.suaiPassword)}||`,
+    {
+      reply_markup: {
+        inline_keyboard: [
+          // [{ text: "Обновить данные", callback_data: "main_menu" }],
+          [{ text: "Удалить данные", callback_data: "delete_credentials" }],
+          [{ text: "Вернуться в главное меню", callback_data: "main_menu" }],
+        ],
+      },
+      parse_mode: "MarkdownV2",
+    },
+  );
+});
+
 composer.use(credentialsAddedOnlyMiddleware);
 composer.action("chats", async (ctx) => {
   const result = await db
