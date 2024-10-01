@@ -4,7 +4,7 @@ import { credentials } from "../../drizzle/schema.js";
 
 export async function credentialsAddedOnlyMiddleware(ctx, next) {
   const data = await db
-    .select()
+    .selectDistinct()
     .from(credentials)
     .where(eq(credentials.userId, ctx.from.id));
 
