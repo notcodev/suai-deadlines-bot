@@ -20,6 +20,14 @@ composer.start(async (ctx) => {
   });
 });
 
+composer.command("feedback", async (ctx) => {
+  await ctx.replyWithMarkdownV2(`💬 *Контакты для обратной связи*`, {
+    reply_markup: {
+      inline_keyboard: [[{ text: "👨🏻‍💻 Codev", url: "https://t.me/notcodev" }]],
+    },
+  });
+});
+
 composer.action("main_menu", async (ctx) => {
   await ctx.editMessageText(greetingMessage, {
     reply_markup: {
