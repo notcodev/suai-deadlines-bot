@@ -4,7 +4,12 @@
   "description": "This bot sends notifications to chat groups about upcoming university assignment deadlines, helping students stay on top of their tasks.",
   "module": "src/index.js",
   "type": "module",
+  "engines": {
+    "node": ">=20.6.0"
+  },
+  "packageManager": "pnpm@9.2.0",
   "scripts": {
+    "start:prod": "NODE_ENV=production node src/index.js",
     "start:dev": "NODE_ENV=development nodemon src/index.js",
     "migration:generate": "drizzle-kit generate",
     "migration:push": "node drizzle/migrate.js"

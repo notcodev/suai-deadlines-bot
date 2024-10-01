@@ -1,0 +1,2 @@
+[start]
+cmd = "pnpm migration:push && pnpm start:prod"
