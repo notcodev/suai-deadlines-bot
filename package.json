@@ -1,7 +1,7 @@
 {
-  "name": "deadline-notifier",
+  "name": "suai-deadline-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "This bot sends notifications to chat groups about upcoming university assignment deadlines, helping students stay on top of their tasks.",
   "module": "src/index.js",
   "type": "module",
   "scripts": {
@@ -9,9 +9,22 @@
     "migration:generate": "drizzle-kit generate",
     "migration:push": "node drizzle/migrate.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "telegram-bot",
+    "suai",
+    "deadline"
+  ],
+  "author": {
+    "name": "nocodev",
+    "url": "https://github.com/notcodev"
+  },
+  "license": "CC BY-NC 4.0",
+  "repository": {
+    "url": "https://github.com/nothugofsea/suai-deadlines-bot.git",
+    "type": "git"
+  },
+  "homepage": "https://github.com/nothugofsea/suai-deadlines-bot",
+  "bugs": "https://github.com/nothugofsea/suai-deadlines-bot/issues",
   "dependencies": {
     "drizzle-orm": "^0.33.0",
     "node-cron": "^3.0.3",
