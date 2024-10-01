@@ -52,16 +52,23 @@ composer.action("chats", async (ctx) => {
         inline_keyboard: result
           .map((entry) => [
             {
-              text: `${entry.displayName} – ${entry.chatId} ${ctx.chat.id === entry.chatId ? "(Этот чат)" : ""}`,
+              text: `${entry.displayName} – ${entry.chatId} ${ctx.chat.id.toString() === entry.chatId ? "(Этот чат)" : ""}`,
               callback_data: `open_chat:${entry.id}`,
             },
           ])
-          .concat([[{ text: "Добавить чат", callback_data: "add_chat" }]]),
+          .concat([
+            [
+              { text: "Добавить чат", callback_data: "add_chat" },
+              { text: "Назад", callback_data: "main_menu" },
+            ],
+          ]),
       },
       parse_mode: "MarkdownV2",
     },
   );
 });
+
+composer.action("add_chat", (ctx) => ctx.scene.enter("ADD_CHAT_SCENE"));
 
 bot.use(session());
 bot.use(stage.middleware());
