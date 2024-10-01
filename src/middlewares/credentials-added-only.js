@@ -23,6 +23,7 @@ export async function credentialsAddedOnlyMiddleware(ctx, next) {
                 callback_data: "add_credentials",
               },
             ],
+            [{ text: "Вернуться в главное меню", callback_data: "main_menu" }],
           ],
         },
       },
