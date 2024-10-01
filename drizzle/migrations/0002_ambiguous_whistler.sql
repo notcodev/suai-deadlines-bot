@@ -1,0 +1,1 @@
+ALTER TABLE "subscriptions" ADD COLUMN "name" varchar(32) DEFAULT '' NOT NULL;
