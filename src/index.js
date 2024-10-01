@@ -7,6 +7,7 @@ import { mainMenuKeyboard } from "./keyboards/main-menu.js";
 import { greetingMessage } from "./messages/greeting.js";
 import { credentials, subscriptions } from "../drizzle/schema.js";
 import { eq } from "drizzle-orm";
+import { sanitizeMarkdown } from "telegram-markdown-sanitizer";
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -54,7 +55,7 @@ composer.action("chats", async (ctx) => {
     .where(eq(credentials.userId, ctx.from.id));
 
   await ctx.editMessageText(
-    `⬇️ *Выберите один из имеющихся чатом или добавьте новый*`,
+    `⬇️ *Выберите один из имеющихся чатов или добавьте новый*`,
     {
       reply_markup: {
         inline_keyboard: result
@@ -74,6 +75,57 @@ composer.action("chats", async (ctx) => {
       parse_mode: "MarkdownV2",
     },
   );
+});
+composer.action(/^open_chat:(\d+)$/, async (ctx) => {
+  const subscriptionEntry = await db
+    .selectDistinct()
+    .from(subscriptions)
+    .where(eq(subscriptions.id, ctx.match[1]))
+    .then((entries) => entries[0]);
+
+  await ctx.editMessageText(
+    `💬 *ID чата:* ${sanitizeMarkdown(subscriptionEntry.chatId)}
+📝 *Название чата*: ${sanitizeMarkdown(subscriptionEntry.displayName)}
+
+🔔 *Следующее уведомление о дедлайнах:* ${sanitizeMarkdown(subscriptionEntry.nextNotifyAt.toLocaleString("ru-ru", { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric" }))}`,
+    {
+      parse_mode: "MarkdownV2",
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Удалить",
+              callback_data: `delete_chat:${subscriptionEntry.id}`,
+            },
+          ],
+          [
+            {
+              text: "Вернуться к списку чатов",
+              callback_data: "chats",
+            },
+          ],
+        ],
+      },
+    },
+  );
+});
+
+composer.action(/^delete_chat:(\d+)$/, async (ctx) => {
+  await db.delete(subscriptions).where(eq(subscriptions.id, ctx.match[1]));
+
+  await ctx.editMessageText("✅ *Чат был успешно удален*", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "Вернуться к списку чатов",
+            callback_data: "chats",
+          },
+        ],
+      ],
+    },
+    parse_mode: "MarkdownV2",
+  });
 });
 
 composer.action("add_chat", (ctx) => ctx.scene.enter("ADD_CHAT_SCENE"));
