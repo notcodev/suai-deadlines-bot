@@ -45,10 +45,10 @@ composer.action("add_credentials", (ctx) => {
 });
 
 composer.action("delete_credentials", async (ctx) => {
-  await db.delete(credentials).where(eq(credentials.id, ctx.from.id));
+  await db.delete(credentials).where(eq(credentials.userId, ctx.from.id));
 
   await ctx.editMessageText(
-    "✅ *Данные для входа в PRO.GUAP были успешно удалены*",
+    "✅ *Данные для входа в PRO\\.GUAP были успешно удалены*",
     {
       reply_markup: {
         inline_keyboard: [
