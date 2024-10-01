@@ -9,6 +9,7 @@ import { credentials, subscriptions } from "../drizzle/schema.js";
 import { eq } from "drizzle-orm";
 import { sanitizeMarkdown } from "telegram-markdown-sanitizer";
 import { registerReminderCron } from "./cron/reminder.js";
+import { createServer } from "http";
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -205,4 +206,16 @@ bot.catch(async (err, ctx) => {
 });
 
 await connectToDatabase();
-bot.launch(() => console.log("Bot successfully started"));
+
+if (process.env.NODE_ENV === "development") {
+  bot.launch(() => console.log("Bot successfully started"));
+} else {
+  const HOST = "0.0.0.0";
+  const PORT = 8080;
+
+  createServer(await bot.createWebhook({ domain: process.env.DOMAIN })).listen(
+    PORT,
+    HOST,
+  );
+  console.log(`Bot successfully started at http://${HOST}:${PORT}`);
+}
