@@ -11,4 +11,10 @@ export const mainMenuKeyboard = [
       callback_data: "chats",
     },
   ],
+  [
+    {
+      text: "Настройки",
+      callback_data: "settings",
+    },
+  ],
 ];
