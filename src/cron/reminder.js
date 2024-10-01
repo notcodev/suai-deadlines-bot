@@ -140,14 +140,14 @@ export function registerReminderCron(bot) {
               subscriptionEntry.chatId,
               `📆 *Дедлайны \\(${sanitizeMarkdown(new Date(minTimestamp).toLocaleString("ru-ru", { day: "numeric", month: "numeric" }))} – ${sanitizeMarkdown(new Date(maxTimestamp).toLocaleString("ru-ru", { day: "numeric", month: "numeric" }))}\\)*
 
-  ${tasks
-    .map(
-      (
-        task,
-      ) => `🕒 *${sanitizeMarkdown(new Date(task.deadlineTimestamp).toLocaleString("ru-ru", { day: "numeric", month: "numeric" }))} – ${sanitizeMarkdown(task.name)}*
-  ${sanitizeMarkdown(task.discipline.name)} *\\([Открыть задание](${task.url})\\)*`,
-    )
-    .join("\n\n")}`,
+${tasks
+  .map(
+    (
+      task,
+    ) => `🕒 *${sanitizeMarkdown(new Date(task.deadlineTimestamp).toLocaleString("ru-ru", { day: "numeric", month: "numeric" }))} – ${sanitizeMarkdown(task.name)}*
+${sanitizeMarkdown(task.discipline.name)} *\\([Открыть задание](${task.url})\\)*`,
+  )
+  .join("\n\n")}`,
               {
                 parse_mode: "MarkdownV2",
               },
