@@ -1,0 +1,9 @@
+{
+  "watch": ["src/", "drizzle/", ".env"],
+  "ext": "*",
+  "exitcrash": false,
+  "ignore": ["*.test.ts"],
+  "execMap": {
+    "js": "node -r dotenv/config"
+  }
+}
