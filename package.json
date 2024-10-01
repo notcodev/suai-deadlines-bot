@@ -20,11 +20,11 @@
   },
   "license": "CC BY-NC 4.0",
   "repository": {
-    "url": "https://github.com/nothugofsea/suai-deadlines-bot.git",
+    "url": "https://github.com/notcodev/suai-deadlines-bot.git",
     "type": "git"
   },
-  "homepage": "https://github.com/nothugofsea/suai-deadlines-bot",
-  "bugs": "https://github.com/nothugofsea/suai-deadlines-bot/issues",
+  "homepage": "https://github.com/notcodev/suai-deadlines-bot",
+  "bugs": "https://github.com/notcodev/suai-deadlines-bot/issues",
   "dependencies": {
     "drizzle-orm": "^0.33.0",
     "node-cron": "^3.0.3",
