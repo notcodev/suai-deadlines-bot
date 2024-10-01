@@ -1,0 +1,25 @@
+{
+  "name": "deadline-notifier",
+  "version": "1.0.0",
+  "description": "",
+  "module": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "migration:generate": "drizzle-kit generate",
+    "migration:push": "node -r esbuild-register db/migrate.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "drizzle-orm": "^0.33.0",
+    "node-cron": "^3.0.3",
+    "node-html-parser": "^6.1.13",
+    "pg": "^8.13.0",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "@types/node-cron": "^3.0.11",
+    "drizzle-kit": "^0.24.2"
+  }
+}
