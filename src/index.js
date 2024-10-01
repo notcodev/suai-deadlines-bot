@@ -82,5 +82,10 @@ bot.use(session());
 bot.use(stage.middleware());
 bot.use(Composer.privateChat(composer));
 
+bot.catch(async (err, ctx) => {
+  console.error(err);
+  await ctx.scene?.leave();
+});
+
 await connectToDatabase();
 bot.launch(() => console.log("Bot successfully started"));
