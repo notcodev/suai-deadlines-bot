@@ -207,15 +207,14 @@ bot.catch(async (err, ctx) => {
 
 await connectToDatabase();
 
-if (process.env.WEBHOOK_DOMIAN === undefined) {
+if (process.env.WEBHOOK_DOMAIN === undefined) {
   bot.launch(() => console.log("Bot successfully started"));
 } else {
   const HOST = "0.0.0.0";
   const PORT = 8080;
 
-  createServer(await bot.createWebhook({ domain: process.env.DOMAIN })).listen(
-    PORT,
-    HOST,
-  );
+  createServer(
+    await bot.createWebhook({ domain: process.env.WEBHOOK_DOMAIN }),
+  ).listen(PORT, HOST);
   console.log(`Bot successfully started at http://${HOST}:${PORT}`);
 }
