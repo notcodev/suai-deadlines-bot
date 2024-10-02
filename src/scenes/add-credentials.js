@@ -3,6 +3,8 @@ import { message } from "telegraf/filters";
 import { sanitizeMarkdown } from "telegram-markdown-sanitizer";
 import { db } from "../../drizzle/connection.js";
 import { credentials } from "../../drizzle/schema.js";
+import * as suai from "../suai/index.js";
+import { InvalidCredentialsError } from "../suai/index.js";
 
 const usernameComposer = new Composer();
 
@@ -67,9 +69,51 @@ passwordComposer.on(message("text"), async (ctx) => {
 const confirmComposer = new Composer();
 
 confirmComposer.action("confirm", async (ctx) => {
+  const { username, password } = ctx.scene.state;
+
+  const [_sessionCookies, error] = await suai
+    .login({ username, password })
+    .then(
+      (data) => [data, null],
+      (error) => [null, error],
+    );
+
+  if (error && error instanceof InvalidCredentialsError) {
+    await Promise.all([
+      ctx.editMessageText(
+        `😢 *К, сожалению, введенные вами данные для входа неверны*`,
+        {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "Попробовать снова",
+                  callback_data: "add_credentials",
+                },
+              ],
+              [
+                {
+                  text: "Вернуться в главное меню",
+                  callback_data: "main_menu",
+                },
+              ],
+            ],
+          },
+          parse_mode: "MarkdownV2",
+        },
+      ),
+      ctx.scene.leave(),
+    ]);
+    return;
+  }
+
+  if (error) {
+    throw error;
+  }
+
   await db.insert(credentials).values({
-    suaiUsername: ctx.scene.state.username,
-    suaiPassword: ctx.scene.state.password,
+    suaiUsername: username,
+    suaiPassword: password,
     userId: ctx.from.id,
   });
 
