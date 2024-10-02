@@ -173,7 +173,7 @@ confirmationComposer.action("confirm_chat_addition", async (ctx) => {
   let nextNotifyDate = new Date();
   nextNotifyDate.setHours(9, 0, 0);
 
-  if (currentDate.getHours() > 9 || currentDate.getMinutes() > 0) {
+  if (currentDate.getHours() >= 9) {
     nextNotifyDate = new Date(nextNotifyDate.getTime() + 24 * 60 * 60 * 1000);
   }
 
