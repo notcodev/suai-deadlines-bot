@@ -2,7 +2,7 @@ import { Composer, Scenes } from "telegraf";
 import { sanitizeMarkdown } from "telegram-markdown-sanitizer";
 import { db } from "../../drizzle/connection.js";
 import { credentials, subscriptions } from "../../drizzle/schema.js";
-import { eq, sql, SQL } from "drizzle-orm";
+import { eq, SQL } from "drizzle-orm";
 
 const chatIdComposer = new Composer();
 
@@ -18,20 +18,24 @@ chatIdComposer.hears(/^-\d+$/, async (ctx) => {
   if (subscriptionEntries.length > 0) {
     await Promise.all([
       ctx.deleteMessage(),
-      ctx.telegram.editMessageText(
-        ctx.chat.id,
-        ctx.scene.state.botMessageId,
-        undefined,
-        `⚠️ *В данный чат уже приходит рассылка о дедлайнах*
+      ctx.telegram
+        .editMessageText(
+          ctx.chat.id,
+          ctx.scene.state.botMessageId,
+          undefined,
+          `⚠️ *В данный чат уже приходит рассылка о дедлайнах*
 
 Вы можете попробовать ввести ID другого чата или вернуться в главное меню`,
-        {
-          reply_markup: {
-            inline_keyboard: [[{ text: "Отменить", callback_data: "cancel" }]],
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: "Отменить", callback_data: "cancel" }],
+              ],
+            },
+            parse_mode: "MarkdownV2",
           },
-          parse_mode: "MarkdownV2",
-        },
-      ),
+        )
+        .catch(),
     ]);
     return;
   }
@@ -49,20 +53,24 @@ chatIdComposer.hears(/^-\d+$/, async (ctx) => {
   ) {
     await Promise.all([
       ctx.deleteMessage(),
-      ctx.telegram.editMessageText(
-        ctx.chat.id,
-        ctx.scene.state.botMessageId,
-        undefined,
-        `⚠️ *Для корректной работы боты необходимо, чтобы бот был участником чата/канала и имел права администратора*
+      ctx.telegram
+        .editMessageText(
+          ctx.chat.id,
+          ctx.scene.state.botMessageId,
+          undefined,
+          `⚠️ *Для корректной работы боты необходимо, чтобы бот был участником чата/канала и имел права администратора*
 
 Вы можете попробовать ввести ID другого чата или вернуться в главное меню`,
-        {
-          reply_markup: {
-            inline_keyboard: [[{ text: "Отменить", callback_data: "cancel" }]],
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: "Отменить", callback_data: "cancel" }],
+              ],
+            },
+            parse_mode: "MarkdownV2",
           },
-          parse_mode: "MarkdownV2",
-        },
-      ),
+        )
+        .catch(),
     ]);
     return;
   }
