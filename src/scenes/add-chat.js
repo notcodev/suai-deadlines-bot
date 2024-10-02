@@ -45,7 +45,7 @@ chatIdComposer.hears(/^-\d+$/, async (ctx) => {
     botChatMember === null ||
     (chatInfo.type === "channel" &&
       (botChatMember.status !== "administrator" ||
-        !botChatMember.can_post_messages === false))
+        botChatMember.can_post_messages === false))
   ) {
     await Promise.all([
       ctx.deleteMessage(),
